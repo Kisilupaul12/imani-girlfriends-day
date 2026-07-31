@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import Countdown from "@/components/Countdown";
@@ -10,63 +10,9 @@ import ReasonsCarousel from "@/components/ReasonsCarousel";
 
 export default function Home() {
   const [showSurprise, setShowSurprise] = useState(false);
-  const [musicStarted, setMusicStarted] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const playerRef = useRef<any>(null);
+  const [showPlayer, setShowPlayer] = useState(false);
   const today = new Date();
   const isAugust1st = today.getMonth() === 7 && today.getDate() === 1;
-
-  // Load YouTube IFrame API
-  useEffect(() => {
-    const tag = document.createElement("script");
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName("script")[0];
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
-
-    (window as any).onYouTubeIframeAPIReady = () => {
-      playerRef.current = new (window as any).YT.Player("youtube-player", {
-        videoId: "g1c0qFg0Gbk", // Unanifaa by Iyanii official video ID
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          loop: 1,
-          playlist: "g1c0qFg0Gbk",
-          modestbranding: 1,
-          showinfo: 0,
-          rel: 0,
-        },
-        events: {
-          onReady: (event: any) => {
-            event.target.setVolume(30); // Soft volume
-          },
-        },
-      });
-    };
-
-    return () => {
-      // Cleanup
-      const script = document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
-      if (script) script.remove();
-    };
-  }, []);
-
-  const startMusic = () => {
-    if (!musicStarted) {
-      setMusicStarted(true);
-      if (playerRef.current?.playVideo) {
-        playerRef.current.playVideo();
-        setIsPlaying(true);
-      }
-    } else {
-      // Toggle play/pause on subsequent clicks
-      if (isPlaying) {
-        playerRef.current?.pauseVideo();
-      } else {
-        playerRef.current?.playVideo();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
 
   // Launch confetti automatically on August 1st
   useEffect(() => {
@@ -97,48 +43,7 @@ export default function Home() {
   }, [isAugust1st]);
 
   return (
-    <main 
-      className="relative min-h-screen flex flex-col items-center justify-center text-white px-4 py-20 overflow-hidden"
-      onClick={startMusic}
-    >
-      {/* Hidden YouTube player */}
-      <div id="youtube-player" className="hidden" />
-
-      {/* Music indicator */}
-      {musicStarted && (
-        <div className="fixed top-4 right-4 z-50 flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full">
-          <span className={`text-lg ${isPlaying ? 'animate-pulse' : ''}`}>
-            {isPlaying ? '🎵' : '🔇'}
-          </span>
-          <span className="text-sm text-rose-200 font-script">
-            {isPlaying ? 'Unanifaa - Iyanii' : 'Tap to play'}
-          </span>
-        </div>
-      )}
-
-      {/* First-time tap prompt */}
-      {!musicStarted && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 backdrop-blur-sm cursor-pointer"
-        >
-          <motion.div
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="text-center"
-          >
-            <p className="font-script text-5xl text-white mb-4">🌹</p>
-            <p className="font-serif text-2xl text-rose-200">
-              Tap anywhere to begin
-            </p>
-            <p className="text-sm text-rose-300/60 mt-2">
-              with our song...
-            </p>
-          </motion.div>
-        </motion.div>
-      )}
-
+    <main className="relative min-h-screen flex flex-col items-center justify-center text-white px-4 py-20 overflow-hidden">
       {/* Floating hearts canvas */}
       <FloatingHearts />
 
@@ -150,7 +55,7 @@ export default function Home() {
         className="text-center z-10"
       >
         <h1 className="font-script text-5xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-pink-300 via-red-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg animate-pulse-soft">
-          Happy Girlfriend's Day
+          Happy Girlfriend’s Day
         </h1>
         <p className="font-script text-3xl md:text-4xl mt-4 text-rose-200">
           Imani🌹
@@ -187,10 +92,7 @@ export default function Home() {
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={(e) => {
-          e.stopPropagation();
-          setShowSurprise(!showSurprise);
-        }}
+        onClick={() => setShowSurprise(!showSurprise)}
         className="mt-16 px-8 py-4 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-script text-2xl rounded-full shadow-2xl animate-pulse-soft z-10"
       >
         ✨ Tap for a secret ✨
@@ -204,14 +106,51 @@ export default function Home() {
             className="mt-8 z-10 bg-white/10 backdrop-blur-md p-8 rounded-3xl max-w-md text-center border border-white/20"
           >
             <p className="text-xl italic text-pink-100">
-              "In a world full of ordinary days, <br />
+              “In a world full of ordinary days, <br />
               you are my forever August 1st. <br />
-              I love you more than all the stars."
+              I love you more than all the stars.”
             </p>
             <p className="mt-4 text-4xl">💖🌹</p>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 🎵 Play our song button + YouTube player */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 3 }}
+        className="mt-12 z-10 flex flex-col items-center"
+      >
+        {!showPlayer ? (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowPlayer(true)}
+            className="px-8 py-4 bg-white/10 backdrop-blur border border-pink-400/30 text-pink-200 font-script text-2xl rounded-full shadow-xl hover:bg-white/20 transition"
+          >
+            🎵 Play “Unanifaa” – Iyanii
+          </motion.button>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-pink-400/20 shadow-2xl"
+          >
+            <iframe
+              width="300"
+              height="60"
+              src="https://www.youtube.com/embed/g1c0qFg0Gbk?autoplay=1&loop=1&playlist=g1c0qFg0Gbk&controls=0&modestbranding=1&showinfo=0&rel=0"
+              title="Unanifaa by Iyanii"
+              allow="autoplay; encrypted-media"
+              className="rounded-lg"
+            />
+            <p className="text-center text-pink-200/70 text-sm mt-2 font-script">
+              🌹 our song 🌹
+            </p>
+          </motion.div>
+        )}
+      </motion.div>
 
       {/* Footer */}
       <p className="mt-20 text-white/40 text-sm z-10">
@@ -219,4 +158,4 @@ export default function Home() {
       </p>
     </main>
   );
-}
+                  }
