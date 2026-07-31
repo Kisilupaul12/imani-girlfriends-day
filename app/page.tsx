@@ -55,7 +55,7 @@ export default function Home() {
         className="text-center z-10"
       >
         <h1 className="font-script text-5xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-pink-300 via-red-400 to-pink-500 bg-clip-text text-transparent drop-shadow-lg animate-pulse-soft">
-          Happy Girlfriend’s Day
+          Happy Girlfriend&apos;s Day
         </h1>
         <p className="font-script text-3xl md:text-4xl mt-4 text-rose-200">
           Imani🌹
@@ -106,9 +106,9 @@ export default function Home() {
             className="mt-8 z-10 bg-white/10 backdrop-blur-md p-8 rounded-3xl max-w-md text-center border border-white/20"
           >
             <p className="text-xl italic text-pink-100">
-              “In a world full of ordinary days, <br />
+              &quot;In a world full of ordinary days, <br />
               you are my forever August 1st. <br />
-              I love you more than all the stars.”
+              I love you more than all the stars.&quot;
             </p>
             <p className="mt-4 text-4xl">💖🌹</p>
           </motion.div>
@@ -129,7 +129,7 @@ export default function Home() {
             onClick={() => setShowPlayer(true)}
             className="px-8 py-4 bg-white/10 backdrop-blur border border-pink-400/30 text-pink-200 font-script text-2xl rounded-full shadow-xl hover:bg-white/20 transition"
           >
-            🎵 Play “Unanifaa” – Iyanii
+            🎵 Play &quot;Unanifaa&quot; – Iyanii
           </motion.button>
         ) : (
           <motion.div
@@ -140,7 +140,7 @@ export default function Home() {
             <iframe
               width="300"
               height="60"
-              src="https://www.youtube.com/embed/g1c0qFg0Gbk?autoplay=1&loop=1&playlist=g1c0qFg0Gbk&controls=0&modestbranding=1&showinfo=0&rel=0"
+              src="https://www.youtube.com/embed/fRDGP5wHo-c?autoplay=1&loop=1&playlist=fRDGP5wHo-c&controls=0&modestbranding=1&showinfo=0&rel=0"
               title="Unanifaa by Iyanii"
               allow="autoplay; encrypted-media"
               className="rounded-lg"
@@ -148,6 +148,14 @@ export default function Home() {
             <p className="text-center text-pink-200/70 text-sm mt-2 font-script">
               🌹 our song 🌹
             </p>
+            <a
+              href="https://www.youtube.com/watch?v=fRDGP5wHo-c"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-center text-pink-300/50 text-xs mt-1 underline"
+            >
+              Open on YouTube if it doesn&apos;t play
+            </a>
           </motion.div>
         )}
       </motion.div>
@@ -158,4 +166,4 @@ export default function Home() {
       </p>
     </main>
   );
-                  }
+        }
